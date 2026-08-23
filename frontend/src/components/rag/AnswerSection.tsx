@@ -7,6 +7,8 @@ import javascript from 'highlight.js/lib/languages/javascript'
 import python from 'highlight.js/lib/languages/python'
 import bash from 'highlight.js/lib/languages/bash'
 import 'highlight.js/styles/github.min.css'
+import renderMathInElement from 'katex/contrib/auto-render'
+import 'katex/dist/katex.min.css'
 
 // Register languages
 hljs.registerLanguage('javascript', javascript)
@@ -53,9 +55,16 @@ export function AnswerSection({ answer, processingTime, isVisible, sources = [] 
           if (contentRef.current) {
             contentRef.current.innerHTML = processedHtml
             
-            // Highlight code blocks after a brief delay to ensure DOM is updated
+            // Render math and highlight code after DOM update
             setTimeout(() => {
               if (contentRef.current) {
+                renderMathInElement(contentRef.current, {
+                  delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                  ],
+                  throwOnError: false,
+                })
                 contentRef.current.querySelectorAll('pre code').forEach((block) => {
                   hljs.highlightElement(block as HTMLElement)
                 })
@@ -94,9 +103,9 @@ export function AnswerSection({ answer, processingTime, isVisible, sources = [] 
       <div className="px-6 md:px-8 py-6 md:py-8">
         <div
           ref={contentRef}
-          className="prose prose-lg max-w-none 
+          className="prose prose-lg max-w-none
             prose-headings:text-gray-900 prose-headings:font-semibold
-            prose-p:text-gray-700 prose-p:leading-relaxed
+            prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-justify prose-p:mb-4
             prose-strong:text-gray-900 prose-strong:font-semibold
             prose-code:text-gray-900 prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono
             prose-pre:bg-gray-50 prose-pre:border prose-pre:border-gray-200 prose-pre:rounded-xl prose-pre:shadow-sm
