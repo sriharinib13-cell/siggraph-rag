@@ -298,7 +298,7 @@ IMPORTANT: You have been provided with {len(results)} paper excerpts. Make sure 
         processing_time = time.time() - start_time
         yield emit("complete", {
             "answer": answer,
-            "sources": list(sources_metadata.values()),
+            "sources": sources_metadata,
             "refined_query": refined if refined != query else None,
             "processing_time": processing_time
         })
@@ -496,11 +496,11 @@ IMPORTANT: You have been provided with {len(results)} paper excerpts. Make sure 
         await websocket.send_json({
             "type": "complete",
             "answer": answer,
-            "sources": list(sources_metadata.values()),
+            "sources": sources_metadata,
             "refined_query": refined if refined != query else None,
             "processing_time": processing_time
         })
-        
+
     except WebSocketDisconnect:
         print("WebSocket disconnected")
     except Exception as e:
