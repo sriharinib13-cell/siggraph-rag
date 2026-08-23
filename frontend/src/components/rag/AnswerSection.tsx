@@ -38,18 +38,9 @@ export function AnswerSection({ answer, processingTime, isVisible, sources = [] 
         try {
           const html = await marked.parse(answer)
 
-          // Replace [Citation Title] patterns with styled badges linking to the source PDF
-          const processedHtml = (html as string).replace(/\[([^\]<]+)\]/g, (match, title) => {
-            const source = sources.find(s => {
-              const t = s.title?.toLowerCase() ?? ''
-              const c = title.toLowerCase()
-              return t === c || t.includes(c) || c.includes(t)
-            })
-            const url = source?.pdf_url || source?.acm_url || source?.github_link
-            if (url) {
-              return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="citation-badge">${title}</a>`
-            }
-            return `<span class="citation-badge">${title}</span>`
+          // Replace [Citation Title] patterns with plain bracketed citation text
+          const processedHtml = (html as string).replace(/\[([^\]<]+)\]/g, (_match, title) => {
+            return `<span class="text-gray-500 text-sm font-medium">[${title}]</span>`
           })
 
           if (contentRef.current) {

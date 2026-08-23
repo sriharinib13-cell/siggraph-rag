@@ -1,5 +1,18 @@
 # SIGGRAPH 2025 RAG Search Application
 
+## What's Been Done (Assignment 3 — AI Masterclass)
+
+All TODOs have been implemented and the application is fully deployed:
+
+- **All pipeline steps completed** — `retrieval_pipeline.py`, `rag_generate.py`, and `upload_from_npz.py` are fully implemented with hybrid search (semantic + BM25 + reranking) and LLM-powered answer generation.
+- **Deployed** — Backend on Render, frontend on Vercel.
+- **Frontend improvements**:
+  - Fixed LaTeX math rendering errors (KaTeX)
+  - Justified answer text for better readability
+  - Inline citations changed from broken anchor links to plain bracketed text `[Title]`, with source links available in the References table below
+
+---
+
 A full-stack Retrieval-Augmented Generation (RAG) application for searching and querying SIGGRAPH 2025 research papers. This project combines a Next.js frontend with a FastAPI backend to provide an intelligent search interface powered by AI.
 
 ## 🎯 Project Overview
