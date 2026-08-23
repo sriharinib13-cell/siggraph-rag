@@ -258,7 +258,7 @@ IMPORTANT: You have been provided with {len(results)} paper excerpts. Make sure 
         }
         
         payload = {
-            "model": f"openai/{rag_generator.config.llm_model}",
+            "model": rag_generator.config.llm_model,
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message}
@@ -267,14 +267,14 @@ IMPORTANT: You have been provided with {len(results)} paper excerpts. Make sure 
             "max_tokens": rag_generator.config.max_tokens,
             "stream": True
         }
-        
+
         response = requests.post(
             f"{rag_generator.openrouter_base_url}/chat/completions",
             headers=headers,
             json=payload,
             stream=True
         )
-        
+
         answer_chunks = []
         for line in response.iter_lines():
             if line:
@@ -452,7 +452,7 @@ IMPORTANT: You have been provided with {len(results)} paper excerpts. Make sure 
         }
         
         payload = {
-            "model": f"openai/{rag_generator.config.llm_model}",
+            "model": rag_generator.config.llm_model,
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message}
@@ -461,14 +461,14 @@ IMPORTANT: You have been provided with {len(results)} paper excerpts. Make sure 
             "max_tokens": rag_generator.config.max_tokens,
             "stream": True
         }
-        
+
         response = requests.post(
             f"{rag_generator.openrouter_base_url}/chat/completions",
             headers=headers,
             json=payload,
             stream=True
         )
-        
+
         answer_chunks = []
         for line in response.iter_lines():
             if line:
