@@ -13,23 +13,45 @@ hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('python', python)
 hljs.registerLanguage('bash', bash)
 
+interface Source {
+  title: string
+  pdf_url?: string
+  github_link?: string
+  acm_url?: string
+}
+
 interface AnswerSectionProps {
   answer: string
   processingTime?: number
   isVisible: boolean
+  sources?: Source[]
 }
 
-export function AnswerSection({ answer, processingTime, isVisible }: AnswerSectionProps) {
+export function AnswerSection({ answer, processingTime, isVisible, sources = [] }: AnswerSectionProps) {
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (contentRef.current && answer) {
-      // Render markdown (marked.parse can be sync or async depending on version)
       const renderMarkdown = async () => {
         try {
           const html = await marked.parse(answer)
+
+          // Replace [Citation Title] patterns with styled badges linking to the source PDF
+          const processedHtml = (html as string).replace(/\[([^\]<]+)\]/g, (match, title) => {
+            const source = sources.find(s => {
+              const t = s.title?.toLowerCase() ?? ''
+              const c = title.toLowerCase()
+              return t === c || t.includes(c) || c.includes(t)
+            })
+            const url = source?.pdf_url || source?.acm_url || source?.github_link
+            if (url) {
+              return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="citation-badge">${title}</a>`
+            }
+            return `<span class="citation-badge">${title}</span>`
+          })
+
           if (contentRef.current) {
-            contentRef.current.innerHTML = html as string
+            contentRef.current.innerHTML = processedHtml
             
             // Highlight code blocks after a brief delay to ensure DOM is updated
             setTimeout(() => {

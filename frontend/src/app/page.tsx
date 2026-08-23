@@ -70,6 +70,7 @@ export default function Home() {
               answer={answer}
               processingTime={processingTime || undefined}
               isVisible={!!answer}
+              sources={sources}
             />
           </div>
 
