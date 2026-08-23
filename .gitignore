@@ -16,6 +16,7 @@ node_modules/
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -25,6 +26,7 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 ts-debug.log*
+*.log
 
 # local env files
 .env*.local
@@ -55,3 +57,7 @@ backend/*.pyc
 
 
 *.npz
+
+# IDE
+.vscode/
+.idea/

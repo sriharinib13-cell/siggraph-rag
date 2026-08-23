@@ -33,8 +33,9 @@ try:
 except ImportError:
     pass
 
-from test_backend_integration import RAGGenerator, GenerationConfig, SYSTEM_PROMPT
-
+#from test_backend_integration import RAGGenerator, GenerationConfig, SYSTEM_PROMPT
+from rag_generate import RAGGenerator, GenerationConfig, SYSTEM_PROMPT
+from retrieval_pipeline import RetrievalPipeline, RetrievalPipelineConfig
 
 # Global instances
 rag_generator: Optional[RAGGenerator] = None
@@ -53,14 +54,20 @@ async def lifespan(app: FastAPI):
     print("🚀 Initializing RAG pipeline...")
     print("="*60)
     
-    config = GenerationConfig(
-        llm_provider="openai",
-        retrieval_top_k=8,
-        refine_query=True,
+    retrieval_config = RetrievalPipelineConfig(
+        qdrant_url=os.getenv("QDRANT_URL"),
+        qdrant_api_key=os.getenv("QDRANT_API_KEY"),
+        openrouter_api_key=os.getenv("OPENROUTER_API_KEY"),
         use_reranker=True
     )
-    
-    rag_generator = RAGGenerator(config)
+    retrieval = RetrievalPipeline(retrieval_config)
+
+    config = GenerationConfig(
+        retrieval_top_k=8,
+        refine_query=True,
+    )
+
+    rag_generator = RAGGenerator(config, retrieval_pipeline=retrieval)
     print("\n✅ RAG pipeline ready!")
     print("="*60 + "\n")
     
